@@ -1,0 +1,101 @@
+<div class="panel" style="margin-top:20px;">
+	<div class="card card--front">
+		
+		<div style="text-align:center">
+			
+			<div style="font-size: 22px;margin-top:0px;margin-bottom:0px;"> {{organization.organizationName | uppercase}}</div>
+			<strong
+        ><p style="margin-top:0px;margin-bottom:0px;font-size:13px;">
+          {{organization.organizationAddress}}
+        </p></strong>
+		</div>
+		<hr />
+		<div class="grid-container-3">
+			<div class="grid-item-center">
+				<img
+          style="border-radius: 8px;"
+          [src]="member.imgSource"
+          alt="{{member.memberName}}"
+          width="96"
+          height="96"
+        />
+      </div>
+				<div class="grid-item-left" style="padding-left:5px;">
+					<h4 style="margin-top:5px;margin-bottom:0px;">
+						{{member.memberName}}
+					</h4>
+					<p style="margin-top:0px;margin-bottom:0px;font-size:13px;">
+						<strong *ngIf="member.gender=='Male'">S/O:</strong><strong *ngIf="member.gender=='Female'">W/O:</strong>
+						{{member.parentName}}
+					</p>
+					<p style="margin-top:0px;margin-bottom:0px;font-size:13px;">
+						<strong>D.O.B:</strong> {{getDate(member.dateOfBirthDate)}}
+						<strong *ngIf="member.gender=='Male'">(M)</strong>
+						<strong *ngIf="member.gender=='Female'">(F)</strong>
+					</p>
+					<p style="margin-top:0px;margin-bottom:0px;font-size:13px;">
+						<strong>Mobile No:</strong> {{member.phoneNo}}
+					</p>
+				</div>
+				<div>
+					<qrcode [qrdata]="data" [width]="96" [errorCorrectionLevel]="'M'"></qrcode>
+				</div>
+			</div>
+			<div>
+				<p style="margin-top:0px;margin-bottom:0px;font-size:13px;">
+					<strong>Address:</strong> {{member.address}}
+				</p>
+			</div>
+			<hr style="margin-bottom:0px;" />
+			<div style="font-size: 28px;text-align: center;padding-bottom:25px;">
+				{{member.memberIdNo}}
+			</div>
+		</div>
+
+		<div class="card card--front asdf">
+			<div style="display: flex;
+  justify-content: center;text-align:center;">
+				<table>
+					<tr>
+						<th>Family Members</th>
+						<th>Age</th>
+						<th>M/F</th>
+						<th>Relation</th>
+					</tr>
+					<tr style="font-size:13px;" *ngFor="let child of member.children">
+						<td style="text-align:left;padding-left: 22px;">{{child.childName}}</td>
+						<td>{{child.childDOB}}</td>
+						<td *ngIf="child.childGender=='Male'">M</td>
+						<td *ngIf="child.childGender=='Female'">F</td>
+						<td style="text-align:left;padding-left: 22px;">{{child.childRelation}}</td>
+					</tr>
+				</table>
+			</div>
+      
+			<div style="position: absolute;
+  width: 50%;
+  margin-left:300px;
+  bottom: 10px;">
+				<div style="margin-right:10px;">
+					<img
+          style="border-radius: 8px;"
+          [src]="organization.imgSource"
+          alt="{{organization.organizationName}}"
+          width="96"
+          height="36"
+        />
+      </div>
+					<p style="margin-top:0px;margin-bottom:0px;margin-left: 15px;font-size:13px;">
+						Muthavalli
+					</p>
+				</div>
+			</div>
+
+			<!-- <qrcode [qrdata]="data" [size]="96" [level]="'M'"></qrcode> -->
+
+		</div>
+		<div style="margin-top:15px;margin-bottom:50px;margin-left: 50px;" id="non-print">
+			<button type="button" mat-raised-button style="background-color:green;color:white" (click)="printPage()">Print</button>
+			<button mat-raised-button color="accent" type="button" (click)="onCancel()" style="margin-left:5px;"> Cancel</button>
+		</div>
+		<br><br>

@@ -1,0 +1,128 @@
+<div style="display: flex;
+justify-content: flex-end;margin-bottom:15px;margin-right:8px;
+">
+	<button mat-raised-button style="background-color:#3fb618;color:white" (click)="onAddMember()" type="button">+ New Member</button>
+</div>
+<mat-card>
+	<form [formGroup]="form" (submit)="onSearchItem()">
+		<div style="display: flex;
+justify-content: center;
+">
+			<mat-form-field>
+				<mat-label>Search Member</mat-label>
+				<input matInput type="text" formControlName="searchText">
+</mat-form-field>
+				<button style="max-height:45px;" mat-raised-button color="primary" type="submit" ><mat-icon>search</mat-icon></button>
+		</div>
+
+	</form>
+
+</mat-card>
+<mat-accordion multi="true" *ngIf="members.length >0 && !isLoading">
+	<mat-expansion-panel *ngFor="let member of members">
+		<mat-expansion-panel-header>
+			<div style="width:100%;">
+				<div style="display: flex;justify-content: space-around;">
+					<div>{{member.memberIdNo}} </div>
+
+
+				</div>
+			</div>
+
+		</mat-expansion-panel-header>
+		<hr>
+
+		<div style="display: flex;justify-content: flex-end;">
+			<small>{{getUserEmail(member.creator)}} updated on {{member.lastUpdatedDate}}</small>
+		</div>
+
+		<div style="margin-bottom:20px;">
+
+			<mat-grid-list cols="4" rowHeight="80px" style="border-bottom: 1.5px solid #ffff;">
+				<mat-grid-tile colspan="1" rowspan="2">
+					<div class="post-image">
+						<img [src]="member.imgSource" [alt]="">
+        </div>
+
+				</mat-grid-tile>
+				<mat-grid-tile colspan="3" rowspan="1">
+
+					<div class="text-inside-grid">
+						<h1>
+							{{member.memberName}} <small style="font-size:40%;background-color: #3f51b5;
+    border-radius: 3px;
+    padding-left: 3px;
+    padding-right: 3px;color:white"> {{member.education}} </small>
+						</h1>
+					</div>
+					<p class="text-inside-grid mat-body" style="margin-top:70px;">
+						<strong>Occupation: </strong>{{member.occupation}}
+					</p>
+				</mat-grid-tile>
+				<mat-grid-tile colspan="3" rowspan="1">
+					<p class="text-inside-grid mat-body">
+						<strong>Date of Birth: </strong>{{getDate(member.dateOfBirthDate)}} <br>
+						<strong>Gender: </strong>{{member.gender}}
+					</p>
+
+				</mat-grid-tile>
+
+			</mat-grid-list>
+		</div>
+		<mat-tab-group mat-align-tabs="center">
+			<mat-tab label="Personal">
+				<p><strong>Adhar No: </strong>{{member.adharNo}}</p>
+				<p><strong>Marital Status: </strong>{{member.maritalStatus}}</p>
+				<p><strong>Financial Status: </strong>{{member.financialStatus}}</p>
+				<p *ngIf="userRole"><strong>Negative Comments: </strong>{{member.negativeComments}}</p>
+				<p *ngIf="userRole"><strong>Poor Health Comments: </strong>{{member.poorHealthComments}}</p>
+			</mat-tab>
+			<mat-tab label="Family">
+				<p *ngIf="member.gender=='Male'"><strong>Parent Name: </strong>{{member.parentName}}</p>
+				<p *ngIf="member.gender!='Male'"><strong>Husband Name: </strong>{{member.parentName}}</p>
+<ng-container *ngIf="member.children.length>0">
+				<strong>Family Members:</strong>
+				<mat-grid-list [cols]="breakpoint" rowHeight="30px" style="background-color:#3f51b5;color:white"
+					(window:resize)="onResize($event)">
+					<mat-grid-tile>Name</mat-grid-tile>
+					<mat-grid-tile>Gender</mat-grid-tile>
+					<mat-grid-tile *ngIf="breakpoint!==3">Age</mat-grid-tile>
+					<mat-grid-tile *ngIf="breakpoint!==3">Education</mat-grid-tile>
+					<mat-grid-tile *ngIf="breakpoint!==3">Occupation</mat-grid-tile>
+					<mat-grid-tile>Relation</mat-grid-tile>
+				</mat-grid-list>
+				<mat-grid-list [cols]="breakpoint" rowHeight="30px" *ngFor="let child of member.children">
+					<mat-grid-tile>{{child.childName}}</mat-grid-tile>
+					<mat-grid-tile>{{child.childGender}}</mat-grid-tile>
+					<mat-grid-tile *ngIf="breakpoint!==3">{{child.childDOB}}</mat-grid-tile>
+					<mat-grid-tile *ngIf="breakpoint!==3">{{child.childEducation}}</mat-grid-tile>
+					<mat-grid-tile *ngIf="breakpoint!==3">{{child.childOccupation}}</mat-grid-tile>
+					<mat-grid-tile>{{child.childRelation}}</mat-grid-tile>
+				</mat-grid-list>
+        </ng-container>
+			</mat-tab>
+			<mat-tab label="Contact">
+				<p><strong>Address: </strong>{{member.address}}</p>
+				<p><strong>Mobile No: </strong>{{member.phoneNo}}</p>
+			</mat-tab>
+		</mat-tab-group>
+		<mat-action-row >
+			<a mat-button *ngIf="userIsAuthenticated" style="color:green" [routerLink]="['/members/view', member._id]">
+				<mat-icon>notes</mat-icon>VIEW
+			</a>
+
+			<a mat-button *ngIf="userIsAuthenticated && userId==member.creator" color="primary" [routerLink]="['/members/edit', member._id]">
+				<mat-icon>edit</mat-icon>EDIT
+			</a>
+			<button  mat-button *ngIf="userIsAuthenticated && userId==member.creator" color="warn" (click)="OnDelete(member._id,member.memberName,member.secretCode, member.imgSource)">
+        <mat-icon>delete</mat-icon>DELETE
+        </button>
+		</mat-action-row>
+	</mat-expansion-panel>
+</mat-accordion>
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions"
+	(page)="onChangedPage($event)" *ngIf="members.length >0">
+</mat-paginator>
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<p class="info-text mat-body-1" *ngIf="members.length <=0 && !isLoading">No Members added yet!</p>

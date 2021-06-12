@@ -1,0 +1,47 @@
+<mat-toolbar color="primary" (window:resize)="onResize($event)">
+	<span *ngIf="userIsAuthenticated && breakpoint==1" >
+     <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" >
+      <button mat-menu-item  routerLink="/members" routerLinkActive="active">
+        <span>Members</span>
+	</button>
+  <button mat-menu-item  routerLink="/organizations/all" routerLinkActive="active">
+        <span>Organization</span>
+	</button>
+      <button mat-menu-item  routerLink="/reset" routerLinkActive="active">
+        <span>Reset</span>
+	</button>
+
+
+	</mat-menu>
+	</span>
+	  <span><a outerLink="/members">
+
+  <img src="https://lh3.googleusercontent.com/fife/ABSRlIrCNGG8DTIBnq1LsDzQtFZ6QQWOYwQx-DcVGE55QZuavCWhJED8RluUGPcZo8HhKFX3HhhQKtzn3Pyqb274JebyFEO3IKyPjN9b6AXChLw6nQDNogPEUbAnKmxYNA_u3AVzfYrN9xE8rJV7BCY_-FaD0l-c1SERPduMOCPvNPvWGKvKn_o-wCNx63OgBBzQprLP3xRpseXgyeE-kH7VFEve4FO26uozWKFoy76lEq6H40-sHYpvkq9D2ZNTef3TxJMBOnMtjAz26oJY7AN3Ao9M86-amiZlM81AbvtqW2sQJC-YQ0zCXD_62aBflOo4HBuqz5cze-p-oMdone26h7o9NjTOUIBmyVy6QIFfAkYYxDz8HI6eojWANZQLLlbp7x0v-IUzkigse9nL_iZ3o7Hynr_sK1pWB0xoNm5WgrzwQlY-22klcAtzdGLLhylqOK5_CN6iqQrtmpcuNwwJizd9ys89n1V2qfYgHs0eAEjG5aAVSd7T4HvMvDfHqOlmmvGoQ6STT8p9NOpnjfhvw5Q5VElNFv4Td_D8vvVhhLnsEdKRmwUXK6KrDR2LGfnoXhTx0kI2NuLdXz_TzSGpOPL1XQbGolOi_LwjLep3JvkogzeDdJ8HCi_DaYzVyPGdWz4oALqex7hkjj9O9wVPvqd2gYQxWVJCQsmWgpYSl9H_cdannyLj-fPNcFYw1L829G6h-CLB95T86UY3_9gXo908VIrRzRDvZQ=w1366-h633-ft" alt="" height="60" width="60" style="margin-top: 8px;">
+  </a>
+  </span>
+	<span >
+
+    <a routerLink="/members">
+  Masjid-e-Qadeem</a></span>
+
+	<span class="spacer"></span>
+	<ul>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+			<button mat-button routerLink="/members" routerLinkActive="mat-accent">Members</button>
+		</li>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+			<button mat-button routerLink="/organizations/all" routerLinkActive="mat-accent">Organization</button>
+		</li>
+		<li *ngIf="userIsAuthenticated && breakpoint==4">
+			<button mat-button routerLink="/reset" routerLinkActive="mat-accent">Reset</button>
+		</li>
+		<li *ngIf="userIsAuthenticated">
+			<button mat-button (click)="onLogout()">Logout</button>
+		</li>
+	</ul>
+</mat-toolbar>
+<small *ngIf="userIsAuthenticated">Welcome {{userEmail}}!</small>
+

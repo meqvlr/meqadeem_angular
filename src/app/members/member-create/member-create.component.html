@@ -1,0 +1,206 @@
+<mat-card>
+	<mat-spinner *ngIf="false"></mat-spinner>
+	<form [formGroup]="form" (submit)="onSaveMember()">
+		<button mat-raised-button color="primary" type="submit" > {{editMode ? 'Update' : 'Add'}} Member</button>
+		<button mat-raised-button color="accent" type="button" (click)="onCancel()" style="margin-left:5px;"> Cancel</button>
+		<br><br>
+		<mat-form-field>
+			<mat-label>Adhar Number</mat-label>
+			<input matInput name="adharNo" formControlName="adharNo" type="text" required>
+			<mat-error *ngIf="form.get('adharNo').invalid">Please enter a Adhar Number</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Member Name</mat-label>
+			<input matInput name="memberName" formControlName="memberName" type="text" required>
+			<mat-error *ngIf="form.get('memberName').invalid">Please enter a Member Name</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Parent/Husband Name</mat-label>
+			<input matInput name="parentName" formControlName="parentName" type="text" required>
+			<mat-hint>Kindly enter Husband Name if it is a Female Member.</mat-hint>
+			<mat-error *ngIf="form.get('parentName').invalid">Please enter a Parent Name</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Education</mat-label>
+			<input matInput name="education" formControlName="education" type="text" required>
+			<mat-error *ngIf="form.get('education').invalid">Please enter Education details</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Occupation</mat-label>
+			<input matInput name="occupation" formControlName="occupation" type="text" required>
+			<mat-error *ngIf="form.get('occupation').invalid">Please enter Occupation details</mat-error>
+		</mat-form-field>
+		<div>
+			<button mat-stroked-button color="accent" type="button" (click)="filePicker.click()">Pick Image</button>
+			<input type="file" #filePicker (change)="onImagePicked($event)">
+        </div>
+
+			<div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+				<img [src]="imagePreview" [alt]="form.value.memberName">
+				<mat-icon *ngIf="isNewImageAdded" style="color:green;margin-left:20px;">check_circle</mat-icon>
+			</div>
+
+			<mat-form-field style="margin-top:15px;">
+				<mat-label>Date Of Birth</mat-label>
+				<input matInput name="dateOfBirthDate" formControlName="dateOfBirthDate" type="date" required>
+				<mat-error *ngIf="form.get('dateOfBirthDate').invalid">Please enter a Date of Birth</mat-error>
+			</mat-form-field>
+			<div style="margin-bottom:15px;">
+				<mat-label>Gender:</mat-label>
+				<mat-radio-group formControlName="gender" #gender>
+					<mat-radio-button (click)="getRadioButtonGender('Male')" value="Male">Male
+					</mat-radio-button>
+					<mat-radio-button (click)="getRadioButtonGender('Female')" value="Female">Female
+					</mat-radio-button>
+				</mat-radio-group>
+			</div>
+			<mat-form-field>
+				<mat-label>Marital Status</mat-label>
+				<mat-select formControlName="maritalStatus" #maritalStatusValue
+					(valueChange)="getMaritalStatus(maritalStatusValue.value)">
+					<mat-option value="Married">Married</mat-option>
+					<mat-option value="Widow">Widow</mat-option>
+					<mat-option value="Separated">Separated</mat-option>
+				</mat-select>
+				<mat-error *ngIf="form.get('maritalStatus').invalid">Please choose a Marital Status</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Address</mat-label>
+				<textarea matInput rows="4" name="address" formControlName="address" required></textarea>
+				<mat-error *ngIf="form.get('address').invalid">Please enter address</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Phone Number</mat-label>
+				<input matInput name="phoneNo" formControlName="phoneNo" type="text" required>
+				<mat-error *ngIf="form.get('phoneNo').invalid">Please enter a Phone Number</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Financial Status</mat-label>
+				<mat-select formControlName="financialStatus" #financialStatusValue
+					(valueChange)="getFinancialStatus(financialStatusValue.value)">
+					<mat-option value="Low Income">Low Income</mat-option>
+					<mat-option value="Moderate Income">Moderate Income</mat-option>
+					<mat-option value="High Income">High Income</mat-option>
+				</mat-select>
+				<mat-error *ngIf="form.get('financialStatus').invalid">Please choose a Financial Status</mat-error>
+			</mat-form-field>
+			<div style="margin-bottom:15px;">
+				<mat-label>Own House:</mat-label>
+				<mat-radio-group formControlName="ownHouse" #ownHouse>
+					<mat-radio-button (click)="getRadioButtonOwnHouse('Yes')" value="Yes">Yes
+					</mat-radio-button>
+					<mat-radio-button (click)="getRadioButtonOwnHouse('No')" value="No">No
+					</mat-radio-button>
+				</mat-radio-group>
+			</div>
+      <div [hidden]="!userRole">
+
+			<div style="margin-bottom:10px;">
+				<mat-checkbox (change)="toggleNegative($event)" formControlName="isNegative">Negative Comments
+				</mat-checkbox>
+			</div>
+			<div [hidden]="!checkBox_negativeBool">
+				<mat-form-field>
+					<mat-label>Negative Comments</mat-label>
+					<textarea matInput rows="4" name="negativeComments" formControlName="negativeComments"></textarea>
+				</mat-form-field>
+			</div>
+			<div style="margin-bottom:10px;">
+				<mat-checkbox (change)="togglePoorHealth($event)" formControlName="isPoorHealth">Poor Health Comments
+				</mat-checkbox>
+			</div>
+			<div [hidden]="!checkBox_isPoorHealth">
+				<mat-form-field>
+					<mat-label>Poor Health Comments</mat-label>
+					<textarea matInput rows="4" name="poorHealthComments" formControlName="poorHealthComments"></textarea>
+				</mat-form-field>
+
+			</div>
+      </div>
+			<div formArrayName="children">
+				<div *ngFor="let childCtrl of controls; let i = index" [formGroupName]="i" style="margin-top: 10px;">
+					<mat-card>
+						<mat-grid-list [cols]="breakpoint" rowHeight="70px" (window:resize)="onResize($event)">
+							<mat-grid-tile>
+								<mat-form-field>
+									<mat-label>Name</mat-label>
+									<input matInput name="childName" formControlName="childName" type="text" required>
+									<!-- <mat-error *ngIf="form.get('childName').invalid">Please enter a Child Name</mat-error> -->
+								</mat-form-field>
+							</mat-grid-tile>
+							<mat-grid-tile>
+								<mat-form-field>
+									<mat-label>Age</mat-label>
+									<input matInput name="childDOB" formControlName="childDOB" type="number" min="1" required>
+									<!-- <mat-error *ngIf="form.get('childAge').invalid">Please enter a Child Age</mat-error> -->
+								</mat-form-field>
+							</mat-grid-tile>
+							<mat-grid-tile>
+								<div style="margin-bottom:15px;">
+									<!--<mat-label>Gender:</mat-label>-->
+									<mat-radio-group formControlName="childGender" #childGender>
+										<mat-radio-button value="Male">Male
+										</mat-radio-button>
+										<mat-radio-button value="Female">Female
+										</mat-radio-button>
+									</mat-radio-group>
+								</div>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="1" rowspan="2" *ngIf="breakpoint!==1">
+								<button mat-raised-button color="warn" type="button" (click)="onDeleteChild(i)"><mat-icon>delete</mat-icon></button>
+							</mat-grid-tile>
+							<mat-grid-tile>
+								<mat-form-field>
+									<mat-label>Relation</mat-label>
+									<mat-select formControlName="childRelation">
+										<mat-option value="Aunt">Aunt</mat-option>
+										<mat-option value="Brother">Brother</mat-option>
+										<mat-option value="B-in-law">B-in-law</mat-option>
+										<mat-option value="Cousin">Cousin</mat-option>
+										<mat-option value="Daughter">Daughter</mat-option>
+										<mat-option value="D-in-law">D-in-law</mat-option>
+										<mat-option value="Father">Father</mat-option>
+										<mat-option value="G.Daughter">G.Daughter</mat-option>
+										<mat-option value="G.Father">G.Father</mat-option>
+										<mat-option value="G.Mother">G.Mother</mat-option>
+										<mat-option value="G.Son">G.Son</mat-option>
+										<mat-option value="Husband">Husband</mat-option>
+										<mat-option value="Mother">Mother</mat-option>
+										<mat-option value="Nephew">Nephew</mat-option>
+										<mat-option value="Niece">Niece</mat-option>
+										<mat-option value="Sister">Sister</mat-option>
+										<mat-option value="Son">Son</mat-option>
+										<mat-option value="S-in-law">S-in-law</mat-option>
+										<mat-option value="Uncle">Uncle</mat-option>
+										<mat-option value="Wife">Wife</mat-option>
+									</mat-select>
+
+								</mat-form-field>
+							</mat-grid-tile>
+							<mat-grid-tile>
+								<mat-form-field>
+									<mat-label>Education</mat-label>
+									<input matInput name="childEducation" formControlName="childEducation" type="text" >
+									<!-- <mat-error *ngIf="form.get('childEducation').invalid">Please enter a Child Name</mat-error> -->
+								</mat-form-field>
+							</mat-grid-tile>
+							<mat-grid-tile>
+								<mat-form-field>
+									<mat-label>Occupation</mat-label>
+									<input matInput name="childOccupation" formControlName="childOccupation" type="text" >
+									<!-- <mat-error *ngIf="form.get('childOccupation').invalid">Please enter a Child Name</mat-error> -->
+								</mat-form-field>
+							</mat-grid-tile>
+							<mat-grid-tile *ngIf="breakpoint==1">
+								<button mat-raised-button color="warn" type="button" (click)="onDeleteChild(i)"><mat-icon>delete</mat-icon></button>
+							</mat-grid-tile>
+						</mat-grid-list>
+
+					</mat-card>
+				</div>
+			</div>
+			<hr>
+			<button mat-raised-button color="primary" type="button" (click)="onAddChild()"> Add Family Member</button>
+
+	</form>
+</mat-card>

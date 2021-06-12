@@ -1,0 +1,39 @@
+:host {
+  display: block;
+  margin-top: 1rem;
+}
+mat-card{
+    width: 80%;
+    margin: auto;
+}
+
+mat-form-field, textarea{
+    width: 100%;
+}
+
+mat-spinner{
+    margin:auto;
+}
+
+input[type="file"]{
+    visibility: hidden;
+}
+
+.image-preview{
+    height: 5rem;
+    margin:1rem 0;
+}
+
+.image-preview img{
+    height: 100%;
+}
+
+mat-radio-button{
+  margin-left: 10px;
+}
+
+@media only screen and (min-width: 1200px) {
+  mat-grid-tile {
+    max-width: 200px;
+  }
+}
